@@ -2,6 +2,8 @@ server:
   port: 8080
 app:
   test: 123
+  scheduler:
+    interval: 1
 springdoc:
   api-docs:
     enabled: true
