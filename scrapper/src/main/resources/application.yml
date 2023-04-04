@@ -1,8 +1,9 @@
 server:
-  port: 8080
+  port: 8081
 app:
   test: 123
-  token: "5659789777:AAHulErrrvaJI7kBIvLr6bxx9YlStcpU_M0"
+  scheduler:
+    interval: 5000
 springdoc:
   api-docs:
     enabled: true
