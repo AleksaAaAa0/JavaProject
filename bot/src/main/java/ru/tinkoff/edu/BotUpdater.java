@@ -34,7 +34,7 @@ public class BotUpdater implements UpdatesListener {
                         updateid_fromComand = update.message().messageId();
                     }
                     case "/help" -> {
-                        bot.execute(new SendMessage(update.message().chat().id(), "никто не поможет"));
+                        bot.execute(new SendMessage(update.message().chat().id(), "помощь <3"));
                         updateid_fromComand = update.message().messageId();
                     }
                     case "/track" -> {

@@ -1,9 +1,9 @@
 CREATE TABLE if not exists chats (
- chat_id BIGINT PRIMARY KEY
+ chat_id INT PRIMARY KEY
 );
 
 CREATE TABLE links (
- link_id BIGINT PRIMARY KEY,
+ link_id SERIAL PRIMARY KEY,
  link_url VARCHAR ( 255 ) UNIQUE NOT NULL
 );
 
