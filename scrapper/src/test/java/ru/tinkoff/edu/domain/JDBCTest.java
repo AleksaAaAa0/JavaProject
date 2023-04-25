@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tinkoff.edu.dao.Chat;
 import ru.tinkoff.edu.dao.Link;
 
 import java.net.URI;
