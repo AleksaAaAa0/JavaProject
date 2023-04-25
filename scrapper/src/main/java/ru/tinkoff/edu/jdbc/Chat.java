@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.dao;
+package ru.tinkoff.edu.jdbc;
 
 public record Chat(
         Integer id

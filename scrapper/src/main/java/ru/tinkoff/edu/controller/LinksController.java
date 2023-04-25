@@ -4,17 +4,20 @@ package ru.tinkoff.edu.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
-import ru.tinkoff.edu.dao.Link;
-import ru.tinkoff.edu.dao.JdbcLinkService;
+import ru.tinkoff.edu.jdbc.Link;
+import ru.tinkoff.edu.jdbc.JdbcLinkService;
 import ru.tinkoff.edu.dto.AddLinkRequest;
 import ru.tinkoff.edu.dto.ApiErrorResponse;
 import ru.tinkoff.edu.dto.LinkResponse;
 import ru.tinkoff.edu.dto.ListLinksResponse;
+import ru.tinkoff.edu.entity.Links;
+import ru.tinkoff.edu.service.JpaLinkService;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -24,8 +27,12 @@ import java.util.Arrays;
 import java.util.List;
 
 @RequestMapping(value = "/links", consumes = "application/json", produces = "application/json")
+@RequiredArgsConstructor
 @RestController
 public class LinksController {
+
+    private final JpaLinkService linkServicee;
+
 
     @ApiResponse(responseCode = "200", description = "Обновление обработано")
     @ApiResponse(responseCode = "400", description = "Некорректные параметры запроса")
@@ -49,11 +56,14 @@ public class LinksController {
     @Operation(summary = "Добавить отслеживание ссылки")
     @PostMapping
     LinkResponse addLink(@RequestHeader int tg_chat_id, @RequestBody @Valid AddLinkRequest request) throws URISyntaxException {
-        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/scrapper", "postgres","postgres")) {
+        try {
             new JdbcLinkService().addLink(tg_chat_id, request.link());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+//        new JpaLinkService().save(new Links().setId(123L).setUrl(new URI("123321.com")));
+
         return  new LinkResponse(1,new URI("qe"));
     }
 

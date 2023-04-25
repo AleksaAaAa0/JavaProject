@@ -1,14 +1,12 @@
 package ru.tinkoff.edu.domain;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tinkoff.edu.dao.Link;
+import ru.tinkoff.edu.jdbc.Link;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Timestamp;
 
 
 public class JDBCTest {
@@ -20,14 +18,14 @@ public class JDBCTest {
     @Transactional
     //@Rollback
     void addLinkTest() throws URISyntaxException {
-        Link newLink = new Link(1,new URI("123"));
+        Link newLink = new Link(1,new URI("123"), new Timestamp(System.currentTimeMillis()));
         //Assert.assertTrue(linkRepository.get(0).equals(newLink));
     }
 
     @Transactional
     //@Rollback
     void removeLinkTest() throws URISyntaxException {
-        Link newLink = new Link(1, new URI("123"));
+        Link newLink = new Link(1, new URI("123"), new Timestamp(System.currentTimeMillis()));
     }
 }
 //        newLink.setId(0);

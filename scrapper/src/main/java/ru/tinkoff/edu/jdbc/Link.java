@@ -1,4 +1,4 @@
-package ru.tinkoff.edu.dao;
+package ru.tinkoff.edu.jdbc;
 
 import java.net.URI;
 import java.sql.Timestamp;
