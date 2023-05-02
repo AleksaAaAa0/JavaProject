@@ -1,0 +1,12 @@
+server:
+  port: 8080
+app:
+  test: 1235
+  token: "5659789777:AAHulErrrvaJI7kBIvLr6bxx9YlStcpU_M0"
+springdoc:
+  api-docs:
+    enabled: true
+    path: /openapi/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui
