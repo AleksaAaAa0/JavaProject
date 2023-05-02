@@ -1,5 +1,6 @@
 package ru.tinkoff.edu.client;
 
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.tinkoff.edu.dto.GitHubResponse;
 import ru.tinkoff.edu.dto.LinkResponse;
@@ -24,10 +25,12 @@ public class BotClient {
     }
 
 
-    public String updateLink() throws URISyntaxException {
+    public String updateLink(Integer id, URI url,String description, Integer[] ids) throws URISyntaxException {
 
-        return webClient.post().uri("/update")
-                .body(new LinkUpdaterResponse(1, new URI("123.com"), "test", new Integer[]{431986570}), LinkUpdaterResponse.class)
+        return webClient.post().uri("/updates")
+                .header("Content-Type", "application/json")
+                .body(BodyInserters.fromValue(new LinkUpdaterResponse(id, url, description, ids)))
+                //.body(new LinkUpdaterResponse(id, url, description, new Integer[]{431986570}), LinkUpdaterResponse.class)
                 .retrieve()
                 .bodyToMono(String.class).block();
 

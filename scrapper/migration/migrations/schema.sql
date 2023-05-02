@@ -5,6 +5,7 @@ CREATE TABLE if not exists chats (
 CREATE TABLE links (
  link_id SERIAL PRIMARY KEY,
  updated_at timestamp,
+ updated_at_scrapper timestamp,
  link_url VARCHAR ( 255 ) UNIQUE NOT NULL
 );
 

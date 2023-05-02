@@ -7,13 +7,21 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.GetUpdates;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.GetUpdatesResponse;
+import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.client.WebClient;
+import ru.tinkoff.edu.client.ScrapperClient;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 
 public class BotUpdater implements UpdatesListener {
+    String comand;
     TelegramBot bot;
     int updateid_fromComand = 0;
+    ScrapperClient client = new ScrapperClient();
     public BotUpdater (TelegramBot bot){
         this.bot = bot;
     }
@@ -23,36 +31,49 @@ public class BotUpdater implements UpdatesListener {
             updates.forEach(update ->{
 
                 String msg = update.message().text();
-                System.out.println(msg);
+                System.out.println(update.message().chat().username() + " " + msg + update.message().chat().id());
 
 
                 if (msg == null) msg = "/help";
 
                 switch (msg){
                     case "/start" -> {
-                        bot.execute(new SendMessage(update.message().chat().id(), "start"));
-                        updateid_fromComand = update.message().messageId();
+                        start(update);
                     }
                     case "/help" -> {
-                        bot.execute(new SendMessage(update.message().chat().id(), "помощь <3"));
-                        updateid_fromComand = update.message().messageId();
+                        bot.execute(new SendMessage(update.message().chat().id(), "никто не поможет"));
                     }
                     case "/track" -> {
-                        bot.execute(new SendMessage(update.message().chat().id(), "track"));
+                        bot.execute(new SendMessage(update.message().chat().id(), "type link"));
                         update.message().messageId();
                         updateid_fromComand = update.message().messageId();
+                        comand = msg;
                     }
                     case "/untrack" -> {
-                        bot.execute(new SendMessage(update.message().chat().id(), "untrack"));
+                        bot.execute(new SendMessage(update.message().chat().id(), "type link"));
                         updateid_fromComand = update.message().messageId();
+                        comand = msg;
                     }
                     case "/list" -> {
                         bot.execute(new SendMessage(update.message().chat().id(), "list"));
-                        updateid_fromComand = update.message().messageId();
                     }
                     default ->{
-                        if (update.message().messageId() == updateid_fromComand + 2)
-                            bot.execute(new SendMessage(update.message().chat().id(), "зарегали команду"));
+                        if (update.message().messageId() == updateid_fromComand + 2){
+                            switch (comand){
+                                case "/track" -> {
+                                    try {
+                                        client.addLink(update.message().chat().id(), update.message().text());
+                                    } catch (URISyntaxException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    bot.execute(new SendMessage(update.message().chat().id(), "track"));
+
+                                }
+                                case "/untrack" -> bot.execute(new SendMessage(update.message().chat().id(), "untrack"));
+
+                            }
+
+                        }
                         else bot.execute(new SendMessage(update.message().chat().id(), "введена хрень"));
                     }
 
@@ -60,6 +81,13 @@ public class BotUpdater implements UpdatesListener {
             });
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
         }
+
+        void start(Update update){
+
+            new ScrapperClient().addChat(update.message().chat().id());
+            bot.execute(new SendMessage(update.message().chat().id(), "зарегали команду старт"));
+        }
+
     }
 
 
