@@ -5,6 +5,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.validation.annotation.Validated;
 
+import java.sql.Connection;
+
 @Validated
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = true)
 public record ApplicationConfig(@NotNull String test) {
@@ -12,4 +14,7 @@ public record ApplicationConfig(@NotNull String test) {
     public String test(ApplicationConfig config) {
         return config.test;
     }
+
+
+
 }

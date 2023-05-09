@@ -3,11 +3,14 @@ package ru.tinkoff.edu;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.request.SetMyCommands;
+import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component("BOT")
 public class Bot {
+
     BotCommand[] commands = {
             new BotCommand("start", "зарегестрировать пользователя"),
             new BotCommand("help", "вывести окно с командами"),

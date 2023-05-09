@@ -1,14 +1,18 @@
 package ru.tinkoff.edu.client;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import ru.tinkoff.edu.dto.AddLinkRequest;
 import ru.tinkoff.edu.dto.LinkResponse;
 import ru.tinkoff.edu.dto.ScrapperResponse;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
+@RequiredArgsConstructor
 public class ScrapperClient {
+
+
 
     private final WebClient webClient;
 
@@ -51,7 +55,7 @@ public class ScrapperClient {
 
         return webClient.post().uri("/links")
                 .header("tg_chat_id", String.valueOf(id))
-                .body(BodyInserters.fromValue(new LinkResponse(new URI(url))))
+                .body(BodyInserters.fromValue(new AddLinkRequest(new URI(url))))
                 .retrieve()
                 .bodyToMono(String.class).block();
 
