@@ -1,0 +1,32 @@
+server:
+  port: 8081
+app:
+  test: 123
+  scheduler:
+    interval: 15000
+springdoc:
+  api-docs:
+    enabled: true
+    path: /openapi/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui
+
+spring:
+  jpa:
+    database: postgresql
+  datasource:
+    password: postgres
+    username: postgres
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/scrapper
+logging:
+  level:
+    org:
+      hibernate:
+        sql: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: Trace
+
