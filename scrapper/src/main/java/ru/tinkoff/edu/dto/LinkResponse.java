@@ -12,5 +12,5 @@ public record LinkResponse(
 
         @NotNull
         URI url
-        ) {
+) {
 }

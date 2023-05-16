@@ -12,11 +12,16 @@ public class JdbcChatService implements ChatService {
     }
 
     @Override
-    public void addChat(int chatId) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("INSERT INTO chats (chat_id) VALUES (?)");
-        statement.setInt(1, chatId);
-        statement.executeUpdate();
-        statement.close();
+    public void addChat(int chatId) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO chats (chat_id) VALUES (?)");
+            statement.setInt(1, chatId);
+            statement.executeUpdate();
+            statement.close();
+        }catch (Exception ignored){
+            
+        }
+       
     }
 
     @Override

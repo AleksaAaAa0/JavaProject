@@ -20,6 +20,8 @@ spring:
     username: postgres
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/scrapper
+  profiles:
+    active: prometheus
 logging:
   level:
     org:
@@ -29,4 +31,26 @@ logging:
           descriptor:
             sql:
               BasicBinder: Trace
+
+management:
+    server:
+        port: 8084
+    endpoints:
+        web:
+            base-path: /
+            exposure.include: [ "info", "health", "prometheus" ]
+            path-mapping:
+                prometheus: metrics
+        endpoint:
+            info.enabled: true
+            health:
+                enabled: true
+                probes.enabled: true
+                group:
+                    readiness.include: db
+                    liveness.include: ping
+            prometheus.enabled: true
+            tags:
+                application: scrapper
+
 

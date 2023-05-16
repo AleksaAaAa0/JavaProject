@@ -18,5 +18,5 @@ public record LinkUpdaterResponse(
 
         @NotNull
         Integer[] tgChatIds
-        ) {
+) {
 }

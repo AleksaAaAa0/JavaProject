@@ -18,14 +18,14 @@ public class JDBCTest {
     @Transactional
     //@Rollback
     void addLinkTest() throws URISyntaxException {
-        Link newLink = new Link(1,new URI("123"), new Timestamp(System.currentTimeMillis()));
+        Link newLink = new Link(1,new URI("123"), new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
         //Assert.assertTrue(linkRepository.get(0).equals(newLink));
     }
 
     @Transactional
     //@Rollback
     void removeLinkTest() throws URISyntaxException {
-        Link newLink = new Link(1, new URI("123"), new Timestamp(System.currentTimeMillis()));
+        Link newLink = new Link(1, new URI("123"), new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()));
     }
 }
 //        newLink.setId(0);

@@ -81,8 +81,6 @@ public class BotUpdater implements UpdatesListener {
                                     if (update.message().text().contains("github") ||
                                             update.message().text().contains("stackoverflow")){
                                         try {
-                                            //rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
-
                                             MessageProperties properties = new MessageProperties();
                                             properties.setHeader("__TypeId__", "ru.tinkoff.edu.dto.AddLinkRequest");
                                             properties.setHeader("chatId", update.message().chat().id());

@@ -2,6 +2,10 @@ package ru.tinkoff.edu.rabbitmq;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Metrics;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -15,10 +19,9 @@ import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.dto.AddLinkRequest;
 import ru.tinkoff.edu.dto.LinkResponse;
 import ru.tinkoff.edu.dto.ListLinksResponse;
+import ru.tinkoff.edu.jdbc.JdbcChatService;
 import ru.tinkoff.edu.jdbc.JdbcLinkService;
 import ru.tinkoff.edu.jdbc.Link;
-
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,13 +29,21 @@ import java.util.List;
 
 @Component
 public class Consumer {
-
     RabbitTemplate rabbitTemplate;
+
+    private final MeterRegistry registry = new SimpleMeterRegistry();
+//    private final Counter messagesProcessed = Counter.builder("обработанные_сообщения")
+//        .description("Количество обработанных сообщений")
+//        .register(registry);
+
+    Counter messagesProcessed = Metrics.counter("messages.processed");
+
+    
     public Consumer(){
-    RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
         rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
         this.rabbitTemplate = rabbitTemplate;
-}
+    }
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory("localhost");
         cachingConnectionFactory.setUsername("guest");
@@ -41,12 +52,17 @@ public class Consumer {
     }
 
     @RabbitListener(queues = "addChat")
-    public void addChat(String id) {
+    public void addChat(String id) throws SQLException {
         System.err.println("Message read from add : " + id);
+        new JdbcChatService().addChat(Integer.parseInt(id));
+        messagesProcessed.increment(1);
+        System.err.println(messagesProcessed.count());
     }
     @RabbitListener(queues = "deleteChat")
     public void deleteChat(Long id) {
         System.err.println("Message read from delete : " + id);
+        messagesProcessed.increment(1);
+
     }
     @RabbitListener(queues = "track")
     public void track(@Payload AddLinkRequest in, @Header("chatId") Long id) {
@@ -56,6 +72,8 @@ public class Consumer {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        messagesProcessed.increment();
+
     }
     @RabbitListener(queues = "untrack")
     public void untrack(@Payload AddLinkRequest in, @Header("chatId") Long id) {
@@ -65,6 +83,8 @@ public class Consumer {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        messagesProcessed.increment();
+
     }
 
     @RabbitListener(queues = "list")
@@ -93,11 +113,9 @@ public class Consumer {
         System.out.println(message.toString());
 
         rabbitTemplate.convertAndSend("listResponse", message);
+        messagesProcessed.increment();
+
     }
 
-/*    @RabbitListener(queues = "myQueue")
-    public void listen(String in) {
-        System.err.println("Message read from myQueue : " + in);
-    }*/
 
 }

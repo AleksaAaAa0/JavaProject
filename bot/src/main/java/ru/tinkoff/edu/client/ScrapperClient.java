@@ -4,35 +4,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.tinkoff.edu.dto.AddLinkRequest;
-import ru.tinkoff.edu.dto.LinkResponse;
 import ru.tinkoff.edu.dto.ScrapperResponse;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 @RequiredArgsConstructor
 public class ScrapperClient {
-
-
-
+    
     private final WebClient webClient;
 
     public ScrapperClient() {
         String gitHubBaseUrl = "http://localhost:8081";
         this.webClient = WebClient.create(gitHubBaseUrl);
     }
-
-
+    
     public String addChat(Long id) {
-/*        WebClient client = WebClient.create();
-        String requestBody = "{\"name\":\"John\", \"age\":30}";
-
-        client.post()
-                .uri("https://example.com/api/endpoint")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(requestBody)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();*/
 
         return webClient.post().uri("/tg-chat/{id}", id)
                 .header("tg_chat_id", String.valueOf(id))

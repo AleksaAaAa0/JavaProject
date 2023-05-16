@@ -3,16 +3,13 @@ package ru.tinkoff.edu.rabbit;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.edu.CreateBot;
-import ru.tinkoff.edu.dto.AddLinkRequest;
 import ru.tinkoff.edu.dto.LinkUpdaterRequest;
 import ru.tinkoff.edu.dto.ListLinksResponse;
 
-import java.util.Arrays;
 
 @Component
 public class Consumer {

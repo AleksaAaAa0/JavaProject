@@ -9,13 +9,18 @@
     <version>1.0</version>
   </parent>
 
-  <groupId>ru.tinkoff.edu</groupId>
   <artifactId>link-parser</artifactId>
   <version>1.0</version>
   <name>link-parser</name>
   <url>http://maven.apache.org</url>
 
   <dependencies>
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-surefire-plugin</artifactId>
+      <version>3.0.0</version>
+    </dependency>
+
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
@@ -29,15 +34,10 @@
       <scope>test</scope>
     </dependency>
 
-
   </dependencies>
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
