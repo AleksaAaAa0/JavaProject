@@ -5,20 +5,20 @@ import org.springframework.web.reactive.function.client.WebClient;
 import ru.tinkoff.edu.dto.StackOverflowItem;
 import ru.tinkoff.edu.dto.StackOverflowResponse;
 
-public class StackOverflowClient {
+public class SOWClient {
 
     private final WebClient webClient;
 
 
     //для использования baseUrl по умолчанию (берётся из properties)
-    public StackOverflowClient() {
+    public SOWClient() {
         String stackOverflowBaseUrl = "https://api.stackexchange.com/2.3/";
         this.webClient = WebClient.create(stackOverflowBaseUrl);
     }
 
 
     //можно указать базовый URL
-    public StackOverflowClient(String baseUrl) {
+    public SOWClient(String baseUrl) {
         this.webClient = WebClient.create(baseUrl);
     }
 

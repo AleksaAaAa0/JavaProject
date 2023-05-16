@@ -19,9 +19,7 @@ import java.sql.Timestamp;
 public class ScrapperApplication {
 public static void main(String[] args) throws URISyntaxException {
         var ctx = SpringApplication.run(ScrapperApplication.class, args);
-        //ApplicationConfig config = ctx.getBean(ApplicationConfig.class);
-        //new BotClient().updateLink();
-        //System.err.println(new StackOverflowClient().fetchQuestion(1642028));
+        
         System.out.println(new Timestamp(System.currentTimeMillis()));
         }
         }

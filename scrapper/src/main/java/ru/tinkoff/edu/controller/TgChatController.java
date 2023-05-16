@@ -16,8 +16,6 @@ import java.sql.SQLException;
 @RestController
 public class TgChatController {
 
-
-
     @Operation(summary = "Зарегестрировать чат")
     @PostMapping
     @ApiResponse(responseCode = "200", description = "Обновление обработано")

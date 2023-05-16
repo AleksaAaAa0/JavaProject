@@ -16,7 +16,6 @@ import ru.tinkoff.edu.dto.AddLinkRequest;
 import ru.tinkoff.edu.dto.ApiErrorResponse;
 import ru.tinkoff.edu.dto.LinkResponse;
 import ru.tinkoff.edu.dto.ListLinksResponse;
-import ru.tinkoff.edu.entity.Links;
 import ru.tinkoff.edu.service.JpaLinkService;
 
 import java.net.URI;
@@ -29,10 +28,9 @@ import java.util.List;
 @RequestMapping(value = "/links", consumes = "application/json", produces = "application/json")
 @RequiredArgsConstructor
 @RestController
-public class LinksController {
+public class LinkController {
 
     private final JpaLinkService linkServicee;
-
 
     @ApiResponse(responseCode = "200", description = "Обновление обработано")
     @ApiResponse(responseCode = "400", description = "Некорректные параметры запроса")

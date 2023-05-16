@@ -2,35 +2,29 @@ package ru.tinkoff.edu.client;
 
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import ru.tinkoff.edu.dto.GitHubResponse;
-import ru.tinkoff.edu.dto.LinkResponse;
 import ru.tinkoff.edu.dto.LinkUpdaterResponse;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class BotClient {
+public class TgBotClient {
     private final WebClient webClient;
 
-    //для использования baseUrl по умолчанию (берётся из properties)
-    public BotClient() {
+    public TgBotClient() {
         String gitHubBaseUrl = "http://localhost:8080";
         this.webClient = WebClient.create(gitHubBaseUrl);
     }
 
-
     //можно указать базовый URL
-    public BotClient(String baseUrl) {
+    public TgBotClient(String baseUrl) {
         this.webClient = WebClient.create(baseUrl);
     }
-
 
     public String updateLink(Integer id, URI url,String description, Integer[] ids) throws URISyntaxException {
 
         return webClient.post().uri("/updates")
                 .header("Content-Type", "application/json")
                 .body(BodyInserters.fromValue(new LinkUpdaterResponse(id, url, description, ids)))
-                //.body(new LinkUpdaterResponse(id, url, description, new Integer[]{431986570}), LinkUpdaterResponse.class)
                 .retrieve()
                 .bodyToMono(String.class).block();
 

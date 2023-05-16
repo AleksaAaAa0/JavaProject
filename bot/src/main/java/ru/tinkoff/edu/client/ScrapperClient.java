@@ -19,7 +19,6 @@ public class ScrapperClient {
     }
     
     public String addChat(Long id) {
-
         return webClient.post().uri("/tg-chat/{id}", id)
                 .header("tg_chat_id", String.valueOf(id))
                 .header("Content-Type", "application/json").retrieve()
@@ -27,37 +26,36 @@ public class ScrapperClient {
 
     }
 
-    public String deleteChat(Long id) {
+    public String deleteChat(Long chatId) {
 
-        return webClient.post().uri("/tg-chat/{id}", id)
-                .header("tg_chat_id", String.valueOf(id))
+        return webClient.post().uri("/tg-chat/{id}", chatId)
+                .header("tg_chat_id", String.valueOf(chatId))
                 .header("Content-Type", "application/json").retrieve()
                 .bodyToMono(String.class).block();
 
     }
 
-    public String addLink(Long id, String url) throws URISyntaxException {
-
+    public String addLink(Long chatId, String url) throws URISyntaxException {
 
         return webClient.post().uri("/links")
-                .header("tg_chat_id", String.valueOf(id))
+                .header("tg_chat_id", String.valueOf(chatId))
                 .body(BodyInserters.fromValue(new AddLinkRequest(new URI(url))))
                 .retrieve()
                 .bodyToMono(String.class).block();
 
     }
-    public ScrapperResponse deleteLink(Long id) {
+    public ScrapperResponse deleteLink(Long chatId) {
 
         return webClient.get().uri("/links")
-                .header("tg_chat_id", String.valueOf(id))
+                .header("tg_chat_id", String.valueOf(chatId))
                 .header("Content-Type", "application/json").retrieve()
                 .bodyToMono(ScrapperResponse.class).block();
 
     }
-    public ScrapperResponse getAllLinks(Long id) {
+    public ScrapperResponse getAllLinks(Long chatId) {
 
         return webClient.get().uri("/links")
-                .header("tg_chat_id", String.valueOf(id))
+                .header("tg_chat_id", String.valueOf(chatId))
                 .header("Content-Type", "application/json").retrieve()
                 .bodyToMono(ScrapperResponse.class).block();
 

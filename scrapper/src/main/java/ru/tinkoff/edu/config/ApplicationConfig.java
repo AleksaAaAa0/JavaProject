@@ -15,7 +15,6 @@ import java.sql.SQLException;
 @Validated
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 public record ApplicationConfig(@NotNull String test, Scheduler scheduler) {
-
     @Bean
     public long schedulerIntervalMs(ApplicationConfig config) {
         return config.scheduler().interval().toMillis();

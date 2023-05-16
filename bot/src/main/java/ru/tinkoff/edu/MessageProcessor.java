@@ -21,7 +21,7 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 
-public class BotUpdater implements UpdatesListener {
+public class MessageProcessor implements UpdatesListener {
 
     String comand;
     TelegramBot bot;
@@ -31,7 +31,7 @@ public class BotUpdater implements UpdatesListener {
 
 
 
-    public BotUpdater (TelegramBot bot){
+    public MessageProcessor(TelegramBot bot){
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
         rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
         this.rabbitTemplate = rabbitTemplate;
@@ -53,16 +53,16 @@ public class BotUpdater implements UpdatesListener {
                         start(update);
                     }
                     case "/help" -> {
-                        bot.execute(new SendMessage(update.message().chat().id(), "никто не поможет"));
+                        bot.execute(new SendMessage(update.message().chat().id(), "помощь <3"));
                     }
                     case "/track" -> {
-                        bot.execute(new SendMessage(update.message().chat().id(), "type link"));
+                        bot.execute(new SendMessage(update.message().chat().id(), "для начала введите ссылку"));
                         update.message().messageId();
                         updateid_fromComand = update.message().messageId();
                         comand = msg;
                     }
                     case "/untrack" -> {
-                        bot.execute(new SendMessage(update.message().chat().id(), "type link"));
+                        bot.execute(new SendMessage(update.message().chat().id(), "необходимо ввести ссылку!"));
                         updateid_fromComand = update.message().messageId();
                         comand = msg;
                     }
@@ -101,7 +101,7 @@ public class BotUpdater implements UpdatesListener {
 
                                     }else{
                                         bot.execute(new SendMessage(update.message().chat().id(),
-                                                "Данный тип ссылок не поддерживается"));
+                                                "Данная ссылка не поддерживается"));
                                     }
 
                                     //client.addLink(update.message().chat().id(), update.message().text());
@@ -122,7 +122,7 @@ public class BotUpdater implements UpdatesListener {
                                         System.out.println(message.toString());
                                         rabbitTemplate.convertAndSend("untrack", message);
                                         bot.execute(new SendMessage(update.message().chat().id(),
-                                                "Ваша ссылка удалена из отслеживания"));
+                                                "Ссылка удалена из отслеживания"));
                                     } catch (URISyntaxException | JsonProcessingException e) {
                                         throw new RuntimeException(e);
                                     }
@@ -132,7 +132,7 @@ public class BotUpdater implements UpdatesListener {
                             }
 
                         }
-                        else bot.execute(new SendMessage(update.message().chat().id(), "Твоя моя не понимать"));
+                        else bot.execute(new SendMessage(update.message().chat().id(), "Сложно"));
                     }
 
                 }
@@ -147,7 +147,7 @@ public class BotUpdater implements UpdatesListener {
 
             //producer.addChat(update.message().chat().id());
             //new ScrapperClient().addChat(update.message().chat().id());
-            bot.execute(new SendMessage(update.message().chat().id(), "зарегали команду старт"));
+            bot.execute(new SendMessage(update.message().chat().id(), "команда start зарегестрирована :)"));
         }
 
     public ConnectionFactory connectionFactory() {

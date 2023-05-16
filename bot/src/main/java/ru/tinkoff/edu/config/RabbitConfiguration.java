@@ -1,11 +1,13 @@
 package ru.tinkoff.edu.config;
 
 
+import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -13,7 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RabbitMQConfiguration {
+public class RabbitConfiguration {
 
     @Bean
     public DirectExchange directExchange() {
@@ -28,9 +30,22 @@ public class RabbitMQConfiguration {
     public Queue deleteChat() {
         return new Queue("deleteChat", false);
     }
+
     @Bean
-    public Queue track() {
-        return new Queue("track", false);
+    public Queue listResponse() {
+        return new Queue("listResponse", false);
+    }
+    @Bean
+    public Queue untrack() {
+        return new Queue("untrack", false);
+    }
+    @Bean
+    public Queue list() {
+        return new Queue("list", false);
+    }
+    @Bean
+    public Queue update() {
+        return new Queue("update", false);
     }
     @Bean
     Queue queue() {
@@ -40,16 +55,11 @@ public class RabbitMQConfiguration {
                 .build();
     }
     @Bean
-    public Queue list() {
-        return new Queue("list", false);
-    }
-    @Bean
-    public Queue listResponse() {
-        return new Queue("listResponse", false);
-    }
-    @Bean
-    public Queue update() {
-        return new Queue("update", false);
+    public ConnectionFactory connectionFactory() {
+        CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory("localhost");
+        cachingConnectionFactory.setUsername("guest");
+        cachingConnectionFactory.setPassword("guest");
+        return cachingConnectionFactory;
     }
     @Bean
     public MessageConverter jsonMessageConverter() {
@@ -60,13 +70,6 @@ public class RabbitMQConfiguration {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
         rabbitTemplate.setMessageConverter(jsonMessageConverter());
         return rabbitTemplate;
-    }
-    @Bean
-    public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory("localhost");
-        cachingConnectionFactory.setUsername("guest");
-        cachingConnectionFactory.setPassword("guest");
-        return cachingConnectionFactory;
     }
 
 }

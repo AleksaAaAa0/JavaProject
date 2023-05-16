@@ -8,7 +8,7 @@ import ru.tinkoff.edu.dto.AddLinkRequest;
 
 @Component
 @RequiredArgsConstructor
-public class Producer {
+public class RabbitProducer {
 
     private final RabbitTemplate rabbitTemplate;
 
@@ -24,7 +24,7 @@ public class Producer {
         rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
         rabbitTemplate.convertAndSend("track", request.link());
     }
-    public void untrackLink(AddLinkRequest request) {//под антрек нет смысла новый дто писать
+    public void untrackLink(AddLinkRequest request) {
         rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
         rabbitTemplate.convertAndSend("untrack", request.link());
     }

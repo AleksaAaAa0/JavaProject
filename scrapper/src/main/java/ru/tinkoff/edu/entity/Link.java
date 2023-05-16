@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @Setter
 @Accessors(chain = true)
 @Entity
-public class Links {
+public class Link {
     @Id
     @Column(name = "link_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

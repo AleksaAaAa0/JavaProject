@@ -5,9 +5,8 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import ru.tinkoff.edu.client.GitHubClient;
-import ru.tinkoff.edu.client.StackOverflowClient;
+import ru.tinkoff.edu.client.SOWClient;
 import ru.tinkoff.edu.dto.LinkUpdaterResponse;
 
 import java.net.URI;
@@ -54,7 +53,7 @@ public class JdbcLinkService implements LinkService {
             System.err.println(updatetime);
         }
         else if (str_url.contains("stackoverflow")) {
-            System.err.println(new StackOverflowClient().fetchQuestion(Long.parseLong(str_url.split("/")[2])));
+            System.err.println(new SOWClient().fetchQuestion(Long.parseLong(str_url.split("/")[2])));
             System.err.println("SOW");
         }
 
@@ -172,7 +171,7 @@ public class JdbcLinkService implements LinkService {
                         System.err.println(updatetime);
                     }
                     if (url.contains("stackoverflow")) {
-                        System.err.println(new StackOverflowClient().fetchQuestion(Long.parseLong(url.split("/")[2])));
+                        System.err.println(new SOWClient().fetchQuestion(Long.parseLong(url.split("/")[2])));
                         System.err.println("SOW");
                     }
 

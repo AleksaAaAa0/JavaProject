@@ -14,7 +14,7 @@
           <lombok.version>1.14.8</lombok.version>
           <log4jdbc.log4j2.version>1.16</log4jdbc.log4j2.version>
           <rest.assured.version>2.3.3</rest.assured.version>
-          <start-class>ru.tinkoff.edu.BotApplication</start-class>
+          <start-class>ru.tinkoff.edu.App</start-class>
           <maven.compiler.source>17</maven.compiler.source>
           <maven.compiler.target>17</maven.compiler.target>
           <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

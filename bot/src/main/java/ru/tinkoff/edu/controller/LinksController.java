@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import ru.tinkoff.edu.CreateBot;
+import ru.tinkoff.edu.TgBot;
 import ru.tinkoff.edu.dto.ApiErrorResponse;
 import ru.tinkoff.edu.dto.LinkUpdaterRequest;
 
@@ -18,19 +18,18 @@ import java.util.Arrays;
 
 @RequestMapping("/updates")
 @RestController
-public class LinkUpdatesController {
+public class LinksController {
 
-    @ApiResponse(responseCode = "200", description = "Обновление обработано")
-    @ApiResponse(responseCode = "400", description = "Некорректные параметры запроса")
-
+    @ApiResponse(responseCode = "200", description = "Обновление подготовлено :)")
+    @ApiResponse(responseCode = "400", description = "Неправильные параметры запроса")
 
     @Operation(summary = "Отправить обновление")
     @PostMapping(consumes = "application/json", produces = "application/json")
     String updateLink(@RequestBody @Valid LinkUpdaterRequest request){
-        TelegramBot bot = CreateBot.getBot();
+        TelegramBot bot = TgBot.getBot();
         System.err.println(Arrays.toString(request.tgChatIds()));
         for (Integer chatid : request.tgChatIds()) {
-            bot.execute(new SendMessage(chatid, "По вашей ссылке  " + request.url() + " произошло обновление "
+            bot.execute(new SendMessage(chatid, "По ссылке  " + request.url() + " произошло обновление "
                     + request.description()));
         }
         return  "some body ones told me..";
@@ -39,7 +38,7 @@ public class LinkUpdatesController {
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleException(MethodArgumentNotValidException e){
-        return ResponseEntity.badRequest().body(new ApiErrorResponse("Некорректные параметры запроса",
+        return ResponseEntity.badRequest().body(new ApiErrorResponse("Неправильные параметры запроса",
                 e.getStatusCode().toString(),
                 e.getObjectName(),
                 e.getLocalizedMessage(),

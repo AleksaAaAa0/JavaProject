@@ -3,9 +3,7 @@ package ru.tinkoff.edu.rabbitmq;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Metrics;
-import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -30,14 +28,7 @@ import java.util.List;
 @Component
 public class Consumer {
     RabbitTemplate rabbitTemplate;
-
-    private final MeterRegistry registry = new SimpleMeterRegistry();
-//    private final Counter messagesProcessed = Counter.builder("обработанные_сообщения")
-//        .description("Количество обработанных сообщений")
-//        .register(registry);
-
     Counter messagesProcessed = Metrics.counter("messages.processed");
-
     
     public Consumer(){
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
@@ -62,10 +53,9 @@ public class Consumer {
     public void deleteChat(Long id) {
         System.err.println("Message read from delete : " + id);
         messagesProcessed.increment(1);
-
     }
     @RabbitListener(queues = "track")
-    public void track(@Payload AddLinkRequest in, @Header("chatId") Long id) {
+    public void trackLink(@Payload AddLinkRequest in, @Header("chatId") Long id) {
         System.err.println("Message read from track : " + in + " " + id);
         try {
             new JdbcLinkService().addLink(id, in.link());
@@ -73,10 +63,9 @@ public class Consumer {
             throw new RuntimeException(e);
         }
         messagesProcessed.increment();
-
     }
     @RabbitListener(queues = "untrack")
-    public void untrack(@Payload AddLinkRequest in, @Header("chatId") Long id) {
+    public void untrackLink(@Payload AddLinkRequest in, @Header("chatId") Long id) {
         System.err.println("Message read from untrack : " + in);
         try {
             new JdbcLinkService().deleteLink(id, in.link().toString());
@@ -88,8 +77,7 @@ public class Consumer {
     }
 
     @RabbitListener(queues = "list")
-    public void list(@Header("chatId") Long id) throws JsonProcessingException {
-        System.err.println("Message read from list : " + id);
+    public void listLinks(@Header("chatId") Long id) throws JsonProcessingException {
         List<LinkResponse> links = new ArrayList<>();
         try {
             List<Link> list = new JdbcLinkService().findAllLinksById(id);
@@ -97,11 +85,7 @@ public class Consumer {
         } catch (SQLException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
-
         ListLinksResponse response = new ListLinksResponse(links.size(), links);
-
-        System.err.println("LINKS "+response);
-
         MessageProperties properties = new MessageProperties();
         properties.setHeader("__TypeId__", "ru.tinkoff.edu.dto.ListLinksResponse");
         properties.setHeader("chatId", id);
@@ -109,13 +93,7 @@ public class Consumer {
         properties.setContentType("application/json");
         ObjectMapper objectMapper = new ObjectMapper();
         Message message = new Message(objectMapper.writeValueAsBytes(response), properties);
-
-        System.out.println(message.toString());
-
         rabbitTemplate.convertAndSend("listResponse", message);
         messagesProcessed.increment();
-
     }
-
-
 }
