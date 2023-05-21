@@ -1,0 +1,37 @@
+server:
+  port: 8080
+app:
+  test: 1235
+  token: "6173129634:AAH5-V1AvHyXpW3GItK8GSRWaWy5AWIfdys"
+springdoc:
+  api-docs:
+    enabled: true
+    path: /openapi/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui
+
+
+management:
+    server:
+        port: 8083
+    endpoints:
+        web:
+            base-path: /
+            exposure.include: [ "info", "health", "prometheus" ]
+            path-mapping:
+                prometheus: metrics
+        endpoint:
+            info.enabled: true
+            health:
+                enabled: true
+                probes.enabled: true
+                group:
+                    readiness.include: db
+                    liveness.include: ping
+            prometheus.enabled: true
+            tags:
+                application: bot
+spring:
+    profiles:
+        active: prometheus
